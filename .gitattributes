@@ -1,1 +1,3 @@
 intellij/internal/misc/maven_install.json linguist-vendored=true
+MODULE.bazel.lock linguist-vendored=true
+examples/test/MODULE.bazel.lock linguist-vendored=true

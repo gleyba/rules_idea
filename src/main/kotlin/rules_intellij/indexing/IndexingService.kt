@@ -14,7 +14,10 @@ import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.*
 import java.nio.file.Path
 import java.nio.file.Paths
+import kotlin.io.path.createTempFile
 import com.intellij.warmup.util.*
+import java.nio.file.LinkOption
+import kotlin.io.path.exists
 
 fun statusFromThrowable(e: Throwable): StatusException {
     var sts = Status.fromThrowable(e)
@@ -39,6 +42,8 @@ fun StartupRequest.toOpenProjectArgs(): OpenProjectArgs {
             get() = false
         override val disabledConfigurators: Set<String>
             get() = emptySet()
+        override val pathToConfigurationFile: Path?
+            get() = null
     }
 }
 
@@ -86,7 +91,7 @@ class IndexingService(val indicator: ProgressIndicator): DaemonGrpc.DaemonImplBa
                 .build()
         }
 
-        val project = importOrOpenProject(request.toOpenProjectArgs(), indicator)
+        val project = importOrOpenProject(request.toOpenProjectArgs())
         synchronized(this) {
             projectsByIds.putIfAbsent(projectPathHash, project)
         }
@@ -123,7 +128,7 @@ class IndexingService(val indicator: ProgressIndicator): DaemonGrpc.DaemonImplBa
             .resolve(java.lang.Long.toHexString(request.projectId))
             .resolve(java.lang.Long.toHexString(StringHash.calc(request.indexId)))
 
-        if (!outputDir.exists() && !outputDir.toFile().mkdirs()) {
+        if (!outputDir.exists(LinkOption.NOFOLLOW_LINKS) && !outputDir.toFile().mkdirs()) {
             throw StatusException(Status.INTERNAL)
         }
 

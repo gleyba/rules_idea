@@ -1,6 +1,6 @@
 <idea-plugin>
   <version>0.0.1</version>
-  <idea-version since-build="212" until-build="222.*" />
+  <idea-version since-build="212" until-build="233.*" />
   <id>rules_intellij.indexing</id>
   <name>Shared Index Bazel Integration</name>
   <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->

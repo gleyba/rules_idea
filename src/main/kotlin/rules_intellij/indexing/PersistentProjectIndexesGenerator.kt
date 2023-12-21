@@ -81,7 +81,7 @@ internal class PersistentProjectIndexesGenerator: DumpSharedIndexCommand<Persist
     ConsoleLog.info("Indexing Server shutdown")
   }
 
-  override fun executeCommand(args: PersistentProjectArgs, indicator: ProgressIndicator) {
+  override suspend fun executeCommand(args: PersistentProjectArgs, indicator: ProgressIndicator) {
     if (args.domainSocket == null) {
       run(NettyServerBuilder
         .forPort(args.port)

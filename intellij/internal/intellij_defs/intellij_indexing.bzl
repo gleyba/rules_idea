@@ -6,7 +6,9 @@ wrap_plugin(
     srcs = [ "@{rules_intellij_repo}//src/main/kotlin/rules_intellij/indexing:srcs" ],
     ide_repo = "{intellij_repo}",
     ide_plugins = [
-        "indexing-shared-ultimate",
+        "indexing-shared-turbocharger",
+        # "indexing-shared-ultimate-plugin-bundled",
+        "indexing-shared-ultimate-plugin-public",
         "indexing-shared",
     ],
     deps = [

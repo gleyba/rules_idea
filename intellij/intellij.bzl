@@ -1,5 +1,3 @@
-load("@io_bazel_rules_kotlin//kotlin/internal:defs.bzl", "KT_COMPILER_REPO")
-
 load("//intellij/internal/intellij_repo:intellij_repo.bzl", "intellij_repo")
 load("//intellij/internal/intellij_defs:intellij_defs.bzl", "intellij_defs")
 
@@ -23,7 +21,6 @@ def intellij(name, register = False, **kwargs):
         kotlin_version = kotlin_version,
         rules_intellij_repo = RULES_INTELLIJ.workspace_name,
         rules_kotlin_repo = "io_bazel_rules_kotlin",
-        kt_compiler_repo = KT_COMPILER_REPO,
     )
 
     if register:

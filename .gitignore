@@ -4,3 +4,4 @@ bazel-*
 /.idea/
 /gradleproject/bin
 .vscode
+MODULE.bazel.lock

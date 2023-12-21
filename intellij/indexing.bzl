@@ -25,8 +25,8 @@ def _map_path(x):
 
 def _stringify_label(l):
     result = str(l)
-    if result.startswith("@"):
-        return result[1:]
+    if result.startswith("@@"):
+        return result[2:]
     return result
 
 def _stringify_name(n):

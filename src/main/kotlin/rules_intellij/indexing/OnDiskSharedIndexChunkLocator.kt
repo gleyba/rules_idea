@@ -22,6 +22,7 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.util.ExceptionUtil
 import com.intellij.util.containers.ContainerUtil
+import com.intellij.util.containers.stream
 import com.intellij.util.io.copy
 import java.io.IOException
 import java.nio.file.Files
@@ -105,9 +106,11 @@ class OnDiskSharedIndexChunkLocator : RequiredForSmartMode {
             }
         }
 
-        private fun listCustomIndexFiles(project: Project): Set<Path> {
-            return LOCAL_FINDER_EP_NAME.extensions().flatMap { finder: SharedIndexLocalFinder -> finder.findSharedIndexChunks(project).stream() }.collect(Collectors.toSet())
-        }
+        private fun listCustomIndexFiles(project: Project): Set<Path> = LOCAL_FINDER_EP_NAME
+            .extensions
+            .stream()
+            .flatMap { finder: SharedIndexLocalFinder -> finder.findSharedIndexChunks(project).stream() }
+            .collect(Collectors.toSet())
 
         private fun listPredefinedIndexFiles(root: Path): Set<Path> {
             if (Files.isRegularFile(root)) {

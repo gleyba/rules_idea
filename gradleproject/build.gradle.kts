@@ -5,18 +5,18 @@ import kotlin.collections.setOf
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.7.10"
-    id("org.jetbrains.intellij") version "1.8.1"
-    id("com.google.protobuf") version "0.8.19"
+    id("org.jetbrains.kotlin.jvm") version "1.9.21"
+    id("org.jetbrains.intellij") version "1.16.1"
+    id("com.google.protobuf") version "0.9.4"
 }
 
 group = "com.example"
 version = "1.0-SNAPSHOT"
-val grpcVersion = "1.48.1"
+val grpcVersion = "1.60.0"
 val grpcKotlinVersion = "1.3.0"
-val protobufVersion = "3.15.8"
-val coroutinesVersion = "1.6.4"
-val nettyVersion = "4.1.79.Final"
+val protobufVersion = "3.25.1"
+val coroutinesVersion = "1.7.3"
+val nettyVersion = "4.1.100.Final"
 
 repositories {
     mavenCentral()
@@ -92,16 +92,11 @@ sourceSets {
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-    // version.set("2021.2.4")
-    // version.set("2022.2.2")
-    version.set("2022.2.3")
+    version.set("2023.3.2")
 
     type.set("IU") // Target IDE Platform
     plugins.set(listOf(
-        // "intellij.indexing.shared:221.6008.13",
-        // "intellij.indexing.shared:222.4167.21",
-        "intellij.indexing.shared:222.4345.14",
-
+        "intellij.indexing.shared:233.13135.65",
         "intellij.indexing.shared.core"
     ))
 }
@@ -118,8 +113,8 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("212")
-        untilBuild.set("222.*")
+        sinceBuild.set("233")
+        untilBuild.set("233.*")
     }
 
     signPlugin {

@@ -33,7 +33,7 @@ load("@local_config_platform//:constraints.bzl", "HOST_CONSTRAINTS")
 toolchain(
     name = "kt_toolchain",
     toolchain_type = _KT_TOOLCHAIN_TYPE,
-    toolchain = "//kt_toolchain",
+    toolchain = "//kt_toolchain:kt_toolchain_impl",
     exec_compatible_with = [ "//:constraint_value" ] + HOST_CONSTRAINTS,
     visibility = ["//visibility:public"],
 )
@@ -77,7 +77,6 @@ intellij_defs = repository_rule(
         "intellij_repo": attr.string(mandatory = True),
         "rules_intellij_repo": attr.string(mandatory = True),
         "rules_kotlin_repo": attr.string(mandatory = True),
-        "kt_compiler_repo": attr.string(mandatory = True),
     },
     local = True,   
 )

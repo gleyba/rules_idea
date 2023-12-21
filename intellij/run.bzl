@@ -4,6 +4,55 @@ _SYSTEM_PATH = "idea.system.path"
 _PLUGINS_PATH = "idea.plugins.path"
 _INDEXES_JSON_PATH = "local.project.shared.index.json.path"
 
+_OPENS = [
+    "java.base/java.io",
+    "java.base/java.lang",
+    "java.base/java.lang.ref",
+    "java.base/java.lang.reflect",
+    "java.base/java.net",
+    "java.base/java.nio",
+    "java.base/java.nio.charset",
+    "java.base/java.text",
+    "java.base/java.time",
+    "java.base/java.util",
+    "java.base/java.util.concurrent",
+    "java.base/java.util.concurrent.atomic",
+    "java.base/java.util.concurrent.locks",
+    "java.base/jdk.internal.vm",
+    "java.base/sun.nio.ch",
+    "java.base/sun.nio.fs",
+    "java.base/sun.security.ssl",
+    "java.base/sun.security.util",
+    "java.base/sun.net.dns",
+    "java.desktop/com.sun.java.swing.plaf.gtk",
+    "java.desktop/java.awt",
+    "java.desktop/java.awt.dnd.peer",
+    "java.desktop/java.awt.event",
+    "java.desktop/java.awt.image",
+    "java.desktop/java.awt.peer",
+    "java.desktop/java.awt.font",
+    "java.desktop/javax.swing",
+    "java.desktop/javax.swing.plaf.basic",
+    "java.desktop/javax.swing.text.html",
+    "java.desktop/sun.awt.X11",
+    "java.desktop/sun.awt.datatransfer",
+    "java.desktop/sun.awt.image",
+    "java.desktop/sun.awt",
+    "java.desktop/sun.lwawt",
+    "java.desktop/sun.lwawt.macosx",
+    "java.desktop/sun.font",
+    "java.desktop/sun.java2d",
+    "java.desktop/sun.swing",
+    "java.desktop/com.sun.java.swing",
+    "jdk.attach/sun.tools.attach",
+    "jdk.compiler/com.sun.tools.javac.api",
+    "jdk.internal.jvmstat/sun.jvmstat.monitor",
+    "jdk.jdi/com.sun.tools.jdi",
+    "java.desktop/com.apple.eawt",
+    "java.desktop/com.apple.laf",
+    "java.desktop/com.apple.eawt.event",
+]
+
 def _run_intellij_impl(ctx):
     out = ctx.actions.declare_file("%s.sh" % ctx.attr.name)
 
@@ -12,7 +61,15 @@ def _run_intellij_impl(ctx):
     java_runtime = ctx.toolchains["@bazel_tools//tools/jdk:runtime_toolchain_type"].java_runtime
     jvm_props = {
         "java.system.class.loader": "com.intellij.util.lang.PathClassLoader",
+        "jna.boot.library.path": "%s/lib/jna/aarch64" % intellij.home_directory,
+        "pty4j.preferred.native.folder": "%s/lib/pty4j" % intellij.home_directory,
+        "jna.nosys": "true",
+        "jna.noclasspath": "true",
+        "sun.java2d.metal": "true",
+        "splash": "true",
+        "aether.connector.resumeDownloads": "false",
     } 
+
     jvm_props.update(ctx.attr.jvm_props)
 
     if not _HOME_PATH in jvm_props:
@@ -46,7 +103,10 @@ def _run_intellij_impl(ctx):
         substitutions = {
             "%%binary%%": intellij.binary_path,
             "%%project_dir%%": intellij_project.project_dir,
-            "%%jvm_flags%%": " \\\n    ".join(['"--jvm_flag=-D%s=%s"' % (k, v) for k,v in jvm_props.items()])
+            "%%jvm_flags%%": " \\\n    ".join(
+                ['"--jvm_flag=-D%s=%s"' % (k, v) for k,v in jvm_props.items()] +
+                ['"--jvm_flag=--add-opens=%s=ALL-UNNAMED"' %x for x in _OPENS]
+            )
         },
         is_executable = True,
     )

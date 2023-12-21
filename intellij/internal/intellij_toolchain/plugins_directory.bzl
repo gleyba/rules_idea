@@ -7,7 +7,7 @@ def _plugins_directory_impl(ctx):
         if len(archive_files) != 1:
             fail("Should be exactly one plugin zip for: %s" % name)
 
-        out = ctx.actions.declare_file("%s/%s" % (ctx.attr.name, name))
+        out = ctx.actions.declare_directory("%s/%s" % (ctx.attr.name, name))
         ctx.actions.run(
             mnemonic = "UnzipPlugin",
             executable = ctx.executable._unzipper,
